@@ -2,10 +2,7 @@ package crypto_archive.com.api.table_entities;
 
 import crypto_archive.com.api.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
-public class User implements UserDetails {
+@Getter
+@Table(name = "users")
+public class User implements UserDetails, TableEntity  {
     @Id
     @GeneratedValue
     private Integer id;

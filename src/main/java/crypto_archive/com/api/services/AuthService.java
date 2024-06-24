@@ -22,6 +22,10 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
+        if (repository.findByUsername(request.getUsername()).isPresent()) {
+            throw new RuntimeException("User with username " + request.getUsername() + " already exists");
+        }
+
         if (request.getRole() == null) {
             request.setRole(Role.USER);
         }

@@ -19,8 +19,12 @@ public class AuthController {
     @Autowired
     JwtService jwtService;
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(service.register(request));
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(service.register(request));
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("user with this username already exists", HttpStatus.CONFLICT);
+        }
     }
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
