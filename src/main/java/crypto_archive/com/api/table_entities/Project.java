@@ -26,5 +26,5 @@ public class Project implements TableEntity {
     private Set<Tag> tags = new HashSet<>();
     private long expenses;
     private long participants;
-    private String imageSrc;
+    private String src;
 }

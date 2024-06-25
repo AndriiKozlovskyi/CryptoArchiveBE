@@ -1,5 +1,6 @@
 package crypto_archive.com.api.responses;
 
+import crypto_archive.com.api.table_entities.Tag;
 import lombok.*;
 
 import java.util.HashSet;
@@ -12,8 +13,8 @@ import java.util.Set;
 public class ProjectResponse {
     private Integer id;
     private String name;
-    private Set<String> tags = new HashSet<>();
+    private Set<Integer> tags = new HashSet<>();
     private long expenses;
     private long participants;
-    private String imageSrc;
+    private String src;
 }

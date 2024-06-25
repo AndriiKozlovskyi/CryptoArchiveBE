@@ -50,7 +50,7 @@ public class ProjectService {
                     project.setName(projectDetails.getName());
                     project.setExpenses(projectDetails.getExpenses());
                     project.setParticipants(projectDetails.getParticipants());
-                    project.setImageSrc(projectDetails.getImageSrc());
+                    project.setSrc(projectDetails.getSrc());
                     project.setTags(projectDetails.getTags());
                     return projectRepository.save(project);
                 }).orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + id));
