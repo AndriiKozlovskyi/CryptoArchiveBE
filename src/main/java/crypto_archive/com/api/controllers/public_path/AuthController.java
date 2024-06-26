@@ -18,14 +18,26 @@ public class AuthController {
     AuthService service;
     @Autowired
     JwtService jwtService;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
             return ResponseEntity.ok(service.register(request));
         } catch (RuntimeException e) {
-            return new ResponseEntity<>("user with this username already exists", HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
+    @GetMapping("/checkUsername")
+    public ResponseEntity<?> checkUsername(@RequestParam String username) {
+        return new ResponseEntity<>(service.usernameExists(username), HttpStatus.OK);
+    }
+
+    @GetMapping("/checkEmail")
+    public ResponseEntity<?> checkEmail(@RequestParam String email) {
+        return new ResponseEntity<>(service.emailExists(email), HttpStatus.OK);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(service.authenticate(request));

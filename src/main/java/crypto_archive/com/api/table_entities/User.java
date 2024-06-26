@@ -21,6 +21,7 @@ public class User implements UserDetails, TableEntity  {
     @Id
     @GeneratedValue
     private Integer id;
+    private String email;
     private String username;
     private String password;
 

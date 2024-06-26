@@ -26,9 +26,7 @@ public class ProjectService {
     private TagRepository tagRepository;
 
     public ProjectResponse createProject(ProjectRequest projectRequest) {
-        System.out.println(projectRequest.toString());
         Project project = ProjectMapper.INSTANCE.toEntity(projectRequest);
-        System.out.println(project);
         Project savedProject = projectRepository.save(project);
         return ProjectMapper.INSTANCE.toDto(savedProject);
     }
