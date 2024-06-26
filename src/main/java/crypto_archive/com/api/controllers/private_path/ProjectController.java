@@ -7,6 +7,8 @@ import crypto_archive.com.api.services.ProjectService;
 import crypto_archive.com.api.services.ResourceNotFoundException;
 import crypto_archive.com.api.table_entities.Project;
 import crypto_archive.com.api.table_entities.Tag;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,6 +66,15 @@ public class ProjectController {
     public ResponseEntity<Void> addTagToProject(@PathVariable Integer projectId, @PathVariable Integer tagId) {
         projectService.addTagToProject(projectId, tagId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{projectId}/save")
+    public ResponseEntity<?> saveProject(@PathVariable Integer projectId, @RequestHeader HttpHeaders headers) {
+        try {
+            return new ResponseEntity<>(projectService.saveProject(projectId, headers), HttpStatus.OK);
+        }catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{projectId}/tags")
