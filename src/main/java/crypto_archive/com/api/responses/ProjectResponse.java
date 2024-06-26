@@ -17,4 +17,5 @@ public class ProjectResponse {
     private long expenses;
     private long participants;
     private String src;
+    private boolean saved;
 }

@@ -31,8 +31,8 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectResponse>> getAllProjects() {
-        List<ProjectResponse> projects = projectService.getAllProjects();
+    public ResponseEntity<List<ProjectResponse>> getAllProjects(@RequestHeader HttpHeaders headers) {
+        List<ProjectResponse> projects = projectService.getAllProjects(headers);
         return ResponseEntity.ok(projects);
     }
 

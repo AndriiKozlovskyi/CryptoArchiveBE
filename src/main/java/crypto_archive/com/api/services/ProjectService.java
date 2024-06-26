@@ -21,10 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -47,9 +45,13 @@ public class ProjectService {
         return ProjectMapper.INSTANCE.toDto(savedProject);
     }
 
-    public List<ProjectResponse> getAllProjects() {
+    public List<ProjectResponse> getAllProjects(HttpHeaders headers) {
         List<Project> projects = projectRepository.findAll();
-        return ProjectMapper.INSTANCE.toDtos(projects);
+        User user = userService.getUserFromHeaders(headers)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+
+        return getProjectsWithSaved(user, projects);
     }
 
     public ProjectResponse getProjectById(Integer id) {
@@ -122,5 +124,28 @@ public class ProjectService {
         return tagRepository.findById(tagId)
                 .map(Tag::getProjects)
                 .orElse(new HashSet<>());
+    }
+
+    private List<ProjectResponse> getProjectsWithSaved(User user, List<Project> projects) {
+
+        Optional<List<SavedProject>> savedProjectsOpt = savedProjectRepository.findByUser(user);
+        if(savedProjectsOpt.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<SavedProject> savedProjects = savedProjectsOpt.get();
+        Set<Integer> savedProjectIds = savedProjects.stream()
+                .map(savedProject -> savedProject.getProject().getId())
+                .collect(Collectors.toSet());
+
+        return projects.stream()
+                .map(project -> {
+                    ProjectResponse response = ProjectMapper.INSTANCE.toDto(project);
+                    if (savedProjectIds.contains(project.getId())) {
+                        response.setSaved(true);
+                    }
+                    return response;
+                })
+                .collect(Collectors.toList());
     }
 }
