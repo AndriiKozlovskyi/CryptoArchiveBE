@@ -16,4 +16,5 @@ public class SavedProjectResponse {
     private long expenses;
     private String status;
     private int amountOfAccs;
+    private int orderNumber;
 }

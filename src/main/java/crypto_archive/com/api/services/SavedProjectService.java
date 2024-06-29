@@ -50,6 +50,7 @@ public class SavedProjectService {
         savedProject.setName(request.getName());
         savedProject.setStatus(request.getStatus());
         savedProject.setAmountOfAccs(request.getAmountOfAccs());
+        savedProject.setOrderNumber(request.getOrderNumber());
         savedProject.setExpenses(request.getExpenses());
 
         repository.save(savedProject);
@@ -65,7 +66,6 @@ public class SavedProjectService {
 
         List<SavedProject> savedProjects = savedProjectsOpt.get();
 
-        System.out.println(savedProjects);
         return SavedProjectMapper.INSTANCE.toDtos(savedProjects);
     }
 }

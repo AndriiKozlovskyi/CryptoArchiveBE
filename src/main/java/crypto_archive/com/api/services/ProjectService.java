@@ -127,7 +127,6 @@ public class ProjectService {
     }
 
     private List<ProjectResponse> getProjectsWithSaved(User user, List<Project> projects) {
-
         Optional<List<SavedProject>> savedProjectsOpt = savedProjectRepository.findByUser(user);
         if(savedProjectsOpt.isEmpty()) {
             return new ArrayList<>();
