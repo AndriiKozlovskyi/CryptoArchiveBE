@@ -47,7 +47,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectResponse> updateProject(@PathVariable Integer id, @RequestBody Project projectDetails) {
+    public ResponseEntity<ProjectResponse> updateProject(@PathVariable Integer id, @RequestBody ProjectRequest projectDetails) {
         try {
             ProjectResponse updatedProject = projectService.updateProject(id, projectDetails);
             return ResponseEntity.ok(updatedProject);

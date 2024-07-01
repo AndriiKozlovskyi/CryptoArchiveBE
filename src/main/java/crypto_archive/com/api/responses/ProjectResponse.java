@@ -13,7 +13,7 @@ import java.util.Set;
 public class ProjectResponse {
     private Integer id;
     private String name;
-    private Set<Integer> tags = new HashSet<>();
+    private Set<TagResponse> tags = new HashSet<>();
     private long expenses;
     private long participants;
     private String src;

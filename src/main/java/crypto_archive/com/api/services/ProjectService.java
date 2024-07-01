@@ -9,6 +9,7 @@ import crypto_archive.com.api.repositories.SavedProjectRepository;
 import crypto_archive.com.api.repositories.TagRepository;
 import crypto_archive.com.api.repositories.UserRepository;
 import crypto_archive.com.api.requests.ProjectRequest;
+import crypto_archive.com.api.requests.TagRequest;
 import crypto_archive.com.api.responses.ProjectResponse;
 import crypto_archive.com.api.responses.SavedProjectResponse;
 import crypto_archive.com.api.responses.TagResponse;
@@ -36,12 +37,19 @@ public class ProjectService {
     private UserRepository userRepository;
     @Autowired
     private TagRepository tagRepository;
+    @Autowired
+    TagService tagService;
 
     private final String defaultStatus = "todo";
 
     public ProjectResponse createProject(ProjectRequest projectRequest) {
         Project project = ProjectMapper.INSTANCE.toEntity(projectRequest);
+        Set<Tag> tags = tagService.getTagsByIds(projectRequest.getTagsIds());
+        project.setTags(tags);
+        System.out.println(project);
+
         Project savedProject = projectRepository.save(project);
+
         return ProjectMapper.INSTANCE.toDto(savedProject);
     }
 
@@ -49,7 +57,6 @@ public class ProjectService {
         List<Project> projects = projectRepository.findAll();
         User user = userService.getUserFromHeaders(headers)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
 
         return getProjectsWithSaved(user, projects);
     }
@@ -60,14 +67,14 @@ public class ProjectService {
         return ProjectMapper.INSTANCE.toDto(project);
     }
 
-    public ProjectResponse updateProject(Integer id, Project projectDetails) {
-         Project _project = projectRepository.findById(id)
+    public ProjectResponse updateProject(Integer id, ProjectRequest projectDetails) {
+        Project _project = projectRepository.findById(id)
                 .map(project -> {
                     project.setName(projectDetails.getName());
                     project.setExpenses(projectDetails.getExpenses());
                     project.setParticipants(projectDetails.getParticipants());
                     project.setSrc(projectDetails.getSrc());
-                    project.setTags(projectDetails.getTags());
+                    project.setTags(new HashSet<>());
                     return projectRepository.save(project);
                 }).orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + id));
         return ProjectMapper.INSTANCE.toDto(_project);
