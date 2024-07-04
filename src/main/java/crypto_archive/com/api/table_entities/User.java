@@ -3,6 +3,7 @@ package crypto_archive.com.api.table_entities;
 import crypto_archive.com.api.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +29,8 @@ public class User implements UserDetails, TableEntity  {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @ManyToMany(mappedBy = "participants")
+    private Set<Event> events = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -53,8 +53,8 @@ public class ProjectService {
         return ProjectMapper.INSTANCE.toDto(savedProject);
     }
 
-    public List<ProjectResponse> getAllProjects(HttpHeaders headers) {
-        List<Project> projects = projectRepository.findAll();
+    public Set<ProjectResponse> getAllProjects(HttpHeaders headers) {
+        Set<Project> projects = new HashSet<>(projectRepository.findAll());
         User user = userService.getUserFromHeaders(headers)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
@@ -119,12 +119,12 @@ public class ProjectService {
         return SavedProjectMapper.INSTANCE.toDto(savedProject);
     }
 
-    public List<TagResponse> getTagsForProject(Integer projectId) {
+    public Set<TagResponse> getTagsForProject(Integer projectId) {
         Set<Tag> tags = projectRepository.findById(projectId)
                 .map(Project::getTags)
                 .orElse(new HashSet<>());
 
-        return TagMapper.INSTANCE.toDtos(tags.stream().toList());
+        return TagMapper.INSTANCE.toDtos(tags);
     }
 
     public Set<Project> getProjectsForTag(Integer tagId) {
@@ -133,13 +133,13 @@ public class ProjectService {
                 .orElse(new HashSet<>());
     }
 
-    private List<ProjectResponse> getProjectsWithSaved(User user, List<Project> projects) {
-        Optional<List<SavedProject>> savedProjectsOpt = savedProjectRepository.findByUser(user);
+    private Set<ProjectResponse> getProjectsWithSaved(User user, Set<Project> projects) {
+        Optional<Set<SavedProject>> savedProjectsOpt = savedProjectRepository.findByUser(user);
         if(savedProjectsOpt.isEmpty()) {
-            return new ArrayList<>();
+            return new HashSet<>();
         }
 
-        List<SavedProject> savedProjects = savedProjectsOpt.get();
+        Set<SavedProject> savedProjects = savedProjectsOpt.get();
         Set<Integer> savedProjectIds = savedProjects.stream()
                 .map(savedProject -> savedProject.getProject().getId())
                 .collect(Collectors.toSet());
@@ -152,6 +152,6 @@ public class ProjectService {
                     }
                     return response;
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }

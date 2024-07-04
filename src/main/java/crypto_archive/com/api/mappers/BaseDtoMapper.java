@@ -1,12 +1,13 @@
 package crypto_archive.com.api.mappers;
 
-import java.util.List;
+
+import java.util.Set;
 
 public interface BaseDtoMapper<Entity, RequestDto, ResponseDto> {
 
   Entity toEntity(RequestDto requestDto);
   ResponseDto toDto(Entity entity);
 
-  List<Entity> toEntities(List<RequestDto> requestDtos);
-  List<ResponseDto> toDtos(List<Entity> entities);
+  Set<Entity> toEntities(Set<RequestDto> requestDtos);
+  Set<ResponseDto> toDtos(Set<Entity> entities);
 }

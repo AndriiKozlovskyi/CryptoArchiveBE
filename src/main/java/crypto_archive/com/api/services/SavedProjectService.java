@@ -1,11 +1,9 @@
 package crypto_archive.com.api.services;
 
-import crypto_archive.com.api.mappers.ProjectMapper;
 import crypto_archive.com.api.mappers.SavedProjectMapper;
 import crypto_archive.com.api.repositories.ProjectRepository;
 import crypto_archive.com.api.repositories.SavedProjectRepository;
 import crypto_archive.com.api.requests.SavedProjectRequest;
-import crypto_archive.com.api.responses.ProjectResponse;
 import crypto_archive.com.api.responses.SavedProjectResponse;
 import crypto_archive.com.api.table_entities.Project;
 import crypto_archive.com.api.table_entities.SavedProject;
@@ -14,11 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 @Service
 public class SavedProjectService {
@@ -29,7 +26,7 @@ public class SavedProjectService {
     private @Autowired
     UserService userService;
 
-    public List<SavedProjectResponse> getAllProjects(HttpHeaders headers) {
+    public Set<SavedProjectResponse> getAllProjects(HttpHeaders headers) {
         User user = userService.getUserFromHeaders(headers)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
@@ -41,8 +38,8 @@ public class SavedProjectService {
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
         User user = userService.getUserFromHeaders(headers)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        List<SavedProject> savedProjects = repository.findByUserAndProject(user, project).orElseThrow(() -> new ResourceNotFoundException("No projects"));
-        repository.deleteById(savedProjects.get(0).getId());
+        Set<SavedProject> savedProjects = repository.findByUserAndProject(user, project).orElseThrow(() -> new ResourceNotFoundException("No projects"));
+        repository.deleteById(savedProjects.iterator().next().getId());
     }
 
     public SavedProjectResponse updateProject(Integer id, SavedProjectRequest request) {
@@ -58,13 +55,13 @@ public class SavedProjectService {
         return SavedProjectMapper.INSTANCE.toDto(savedProject);
     }
 
-    private List<SavedProjectResponse> getProjectsWithSaved(User user) {
-        Optional<List<SavedProject>> savedProjectsOpt = repository.findByUser(user);
+    private Set<SavedProjectResponse> getProjectsWithSaved(User user) {
+        Optional<Set<SavedProject>> savedProjectsOpt = repository.findByUser(user);
         if(savedProjectsOpt.isEmpty()) {
-            return new ArrayList<>();
+            return new HashSet<>();
         }
 
-        List<SavedProject> savedProjects = savedProjectsOpt.get();
+        Set<SavedProject> savedProjects = savedProjectsOpt.get();
 
         return SavedProjectMapper.INSTANCE.toDtos(savedProjects);
     }

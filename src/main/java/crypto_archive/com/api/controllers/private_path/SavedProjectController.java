@@ -1,7 +1,6 @@
 package crypto_archive.com.api.controllers.private_path;
 
 import crypto_archive.com.api.requests.SavedProjectRequest;
-import crypto_archive.com.api.responses.ProjectResponse;
 import crypto_archive.com.api.responses.SavedProjectResponse;
 import crypto_archive.com.api.services.ResourceNotFoundException;
 import crypto_archive.com.api.services.SavedProjectService;
@@ -11,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "${base-path}/saved_project")
@@ -23,7 +22,7 @@ public class SavedProjectController {
     @GetMapping("")
     public ResponseEntity<?> getAllSavedProjects(@RequestHeader HttpHeaders headers) {
         try {
-            List<SavedProjectResponse> response = savedProjectService.getAllProjects(headers);
+            Set<SavedProjectResponse> response = savedProjectService.getAllProjects(headers);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();

@@ -19,5 +19,6 @@ public class Tag implements TableEntity {
     private String name;
     @ManyToMany(mappedBy = "tags")
     private Set<Project> projects = new HashSet<>();
-
+    @ManyToMany(mappedBy = "tags")
+    private Set<Event> events = new HashSet<>();
 }

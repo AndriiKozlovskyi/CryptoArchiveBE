@@ -5,8 +5,6 @@ import crypto_archive.com.api.responses.ProjectResponse;
 import crypto_archive.com.api.responses.TagResponse;
 import crypto_archive.com.api.services.ProjectService;
 import crypto_archive.com.api.services.ResourceNotFoundException;
-import crypto_archive.com.api.table_entities.Project;
-import crypto_archive.com.api.table_entities.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "${base-path}/project")
@@ -31,8 +29,8 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectResponse>> getAllProjects(@RequestHeader HttpHeaders headers) {
-        List<ProjectResponse> projects = projectService.getAllProjects(headers);
+    public ResponseEntity<Set<ProjectResponse>> getAllProjects(@RequestHeader HttpHeaders headers) {
+        Set<ProjectResponse> projects = projectService.getAllProjects(headers);
         return ResponseEntity.ok(projects);
     }
 
@@ -78,8 +76,8 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}/tags")
-    public ResponseEntity<List<TagResponse>> getTagsForProject(@PathVariable Integer projectId) {
-        List<TagResponse> tags = projectService.getTagsForProject(projectId);
+    public ResponseEntity<Set<TagResponse>> getTagsForProject(@PathVariable Integer projectId) {
+        Set<TagResponse> tags = projectService.getTagsForProject(projectId);
         return ResponseEntity.ok(tags);
     }
 }
