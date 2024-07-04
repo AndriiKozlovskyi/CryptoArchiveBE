@@ -31,7 +31,7 @@ public class SavedEvent implements TableEntity {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime endDate;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="event_id", nullable=false)
+    @JoinColumn(name="event_id")
     @EqualsAndHashCode.Exclude
     private Event event;
     @OneToMany(fetch = FetchType.LAZY)

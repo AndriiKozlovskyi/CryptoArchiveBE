@@ -28,11 +28,7 @@ public class EventService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private TagRepository tagRepository;
-    @Autowired
-    TagService tagService;
-    @Autowired
-    private DateRepository dateRepository;
+    private TagService tagService;
 
     private final String defaultStatus = "todo";
 
@@ -67,7 +63,7 @@ public class EventService {
                 event.setSrc(eventRequest.getSrc());
                 event.setStartDate(eventRequest.getStartDate());
                 event.setEndDate(eventRequest.getEndDate());
-                event.setTags(new HashSet<>());
+                event.setTags(tagService.getTagsByIds(eventRequest.getTagsIds()));
                 return eventRepository.save(event);
             }).orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
         return EventMapper.INSTANCE.toDto(_event);
@@ -75,22 +71,6 @@ public class EventService {
 
     public void deleteEvent(Integer id) {
         eventRepository.deleteById(id);
-    }
-
-    public void addTagToEvent(Integer eventId, Integer tagId) {
-        Optional<Event> eventOpt = eventRepository.findById(eventId);
-        Optional<Tag> tagOpt = tagRepository.findById(tagId);
-
-        if (eventOpt.isPresent() && tagOpt.isPresent()) {
-            Event event = eventOpt.get();
-            Tag tag = tagOpt.get();
-
-            event.getTags().add(tag);
-            tag.getEvents().add(event);
-
-            eventRepository.save(event);
-            tagRepository.save(tag);
-        }
     }
 
     public SavedEventResponse participateEvent(Integer eventId, HttpHeaders httpHeaders) {
@@ -106,28 +86,18 @@ public class EventService {
         savedEvent.setEndDate(event.getEndDate());
         savedEvent.setUser(user);
         savedEvent.setEvent(event);
+        savedEvent.setStatus(defaultStatus);
 
         event.getParticipants().add(user);
 
-        eventRepository.save(event);
-        savedEventRepository.save(savedEvent);
+        SavedEvent _savedEvent = savedEventRepository.save(savedEvent);
+        event.getParticipants().add(user);
+
+        user.getSavedEvents().add(_savedEvent);
+        userRepository.save(user);
         eventRepository.save(event);
 
         return SavedEventMapper.INSTANCE.toDto(savedEvent);
-    }
-
-    public Set<TagResponse> getTagsForEvent(Integer eventId) {
-        Set<Tag> tags = eventRepository.findById(eventId)
-                .map(Event::getTags)
-                .orElse(new HashSet<>());
-
-        return TagMapper.INSTANCE.toDtos(tags);
-    }
-
-    public Set<Event> getEventsForTag(Integer tagId) {
-        return tagRepository.findById(tagId)
-                .map(Tag::getEvents)
-                .orElse(new HashSet<>());
     }
 
     private Set<EventResponse> getEventsWithSaved(User user, Set<Event> events) {

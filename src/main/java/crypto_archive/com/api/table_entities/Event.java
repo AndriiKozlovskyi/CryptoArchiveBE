@@ -27,6 +27,7 @@ public class Event implements TableEntity {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @EqualsAndHashCode.Exclude
     private Set<Tag> tags = new HashSet<>();
     @ManyToMany
     @JoinTable(
@@ -34,9 +35,11 @@ public class Event implements TableEntity {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @EqualsAndHashCode.Exclude
     private Set<User> participants = new HashSet<>();
     private String src;
     @OneToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
     private Set<Task> tasks = new HashSet<>();
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime startDate;

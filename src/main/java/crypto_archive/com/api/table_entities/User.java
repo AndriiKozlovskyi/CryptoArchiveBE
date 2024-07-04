@@ -30,7 +30,11 @@ public class User implements UserDetails, TableEntity  {
     @Enumerated(EnumType.STRING)
     private Role role;
     @ManyToMany(mappedBy = "participants")
+    @EqualsAndHashCode.Exclude
     private Set<Event> events = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<SavedEvent> savedEvents = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

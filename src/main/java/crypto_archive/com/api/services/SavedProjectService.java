@@ -23,8 +23,8 @@ public class SavedProjectService {
     private SavedProjectRepository repository;
     @Autowired
     private ProjectRepository projectRepository;
-    private @Autowired
-    UserService userService;
+    @Autowired
+    private UserService userService;
 
     public Set<SavedProjectResponse> getAllProjects(HttpHeaders headers) {
         User user = userService.getUserFromHeaders(headers)

@@ -1,11 +1,10 @@
 package crypto_archive.com.api.services;
 
-import crypto_archive.com.api.mappers.DateMapper;
 import crypto_archive.com.api.mappers.SavedEventMapper;
 import crypto_archive.com.api.repositories.SavedEventRepository;
+import crypto_archive.com.api.repositories.UserRepository;
 import crypto_archive.com.api.requests.SavedEventRequest;
 import crypto_archive.com.api.responses.SavedEventResponse;
-import crypto_archive.com.api.table_entities.Event;
 import crypto_archive.com.api.table_entities.SavedEvent;
 import crypto_archive.com.api.table_entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +16,31 @@ import java.util.Set;
 @Service
 public class SavedEventService {
     @Autowired
-    SavedEventRepository savedEventRepository;
+    private SavedEventRepository savedEventRepository;
     @Autowired
-    UserService userService;
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     public Set<SavedEventResponse> allSavedEvents(HttpHeaders headers) {
         User user = userService.getUserFromHeaders(headers)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return SavedEventMapper.INSTANCE.toDtos(savedEventRepository.findByUser(user).get());
+        return SavedEventMapper.INSTANCE.toDtos(user.getSavedEvents());
     }
 
     public SavedEventResponse createSavedEvent(HttpHeaders headers, SavedEventRequest savedEventRequest) {
         User user = userService.getUserFromHeaders(headers)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         SavedEvent savedEvent = SavedEventMapper.INSTANCE.toEntity(savedEventRequest);
         savedEvent.setUser(user);
-        return SavedEventMapper.INSTANCE.toDto(savedEvent);
+
+        SavedEvent _savedEvent = savedEventRepository.save(savedEvent);
+        user.getSavedEvents().add(_savedEvent);
+
+        userRepository.save(user);
+
+        return SavedEventMapper.INSTANCE.toDto(_savedEvent);
     }
 
     public SavedEventResponse updateSavedEvent(Integer id, SavedEventRequest savedEventRequest) {

@@ -11,10 +11,10 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
     @Autowired
-    JwtService jwtService;
+    private JwtService jwtService;
 
     public Optional<User> getUserFromHeaders(HttpHeaders headers) {
 

@@ -18,7 +18,9 @@ public class Tag implements TableEntity {
     private Integer id;
     private String name;
     @ManyToMany(mappedBy = "tags")
+    @EqualsAndHashCode.Exclude
     private Set<Project> projects = new HashSet<>();
     @ManyToMany(mappedBy = "tags")
+    @EqualsAndHashCode.Exclude
     private Set<Event> events = new HashSet<>();
 }

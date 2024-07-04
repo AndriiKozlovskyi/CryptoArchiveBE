@@ -15,7 +15,7 @@ import java.util.Set;
 @Service
 public class TagService {
     @Autowired
-    TagRepository tagRepository;
+    private TagRepository tagRepository;
 
     public Set<TagResponse> getAllTags() {
         return TagMapper.INSTANCE.toDtos(new HashSet<>(tagRepository.findAll()));

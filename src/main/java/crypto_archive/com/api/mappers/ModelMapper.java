@@ -8,6 +8,9 @@ import java.util.List;
 @Mapper
 public interface ModelMapper {
     default Integer toId(TableEntity entity) {
+        if(entity == null) {
+            return null;
+        }
         return entity.getId();
     }
 

@@ -17,9 +17,9 @@ public class Task implements TableEntity {
     private Integer id;
     private String header;
     private String description;
-    private boolean completed;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="event_id", nullable=false)
+    @EqualsAndHashCode.Exclude
     private Event event;
 
 }

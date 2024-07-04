@@ -38,7 +38,7 @@ public class ProjectService {
     @Autowired
     private TagRepository tagRepository;
     @Autowired
-    TagService tagService;
+    private TagService tagService;
 
     private final String defaultStatus = "todo";
 
@@ -46,7 +46,6 @@ public class ProjectService {
         Project project = ProjectMapper.INSTANCE.toEntity(projectRequest);
         Set<Tag> tags = tagService.getTagsByIds(projectRequest.getTagsIds());
         project.setTags(tags);
-        System.out.println(project);
 
         Project savedProject = projectRepository.save(project);
 

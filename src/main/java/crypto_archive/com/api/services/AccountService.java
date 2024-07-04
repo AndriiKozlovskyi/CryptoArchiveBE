@@ -15,9 +15,9 @@ import java.util.Set;
 @Service
 public class AccountService {
     @Autowired
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
     @Autowired
-    SavedEventRepository savedEventRepository;
+    private SavedEventRepository savedEventRepository;
 
     public Set<AccountResponse> getAccountsForSavedEvent(Integer savedEventId) {
         SavedEvent savedEvent = savedEventRepository.findById(savedEventId)

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskRequest {
-    private String name;
     private String header;
     private String description;
 }

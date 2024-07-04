@@ -20,12 +20,6 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @PostMapping
-    public ResponseEntity<EventResponse> createEvent(@RequestBody EventRequest eventRequest) {
-        EventResponse createdEvent = eventService.createEvent(eventRequest);
-        return ResponseEntity.ok(createdEvent);
-    }
-
     @GetMapping
     public ResponseEntity<Set<EventResponse>> getAllEvents(@RequestHeader HttpHeaders headers) {
         Set<EventResponse> events = eventService.getAllEvents(headers);
@@ -39,6 +33,21 @@ public class EventController {
             return ResponseEntity.ok(event);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<EventResponse> createEvent(@RequestBody EventRequest eventRequest) {
+        EventResponse createdEvent = eventService.createEvent(eventRequest);
+        return ResponseEntity.ok(createdEvent);
+    }
+
+    @PostMapping("/{eventId}/participate")
+    public ResponseEntity<?> participateEvent(@PathVariable Integer eventId, @RequestHeader HttpHeaders headers) {
+        try {
+            return new ResponseEntity<>(eventService.participateEvent(eventId, headers), HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -56,26 +65,5 @@ public class EventController {
     public ResponseEntity<Void> deleteEvent(@PathVariable Integer id) {
         eventService.deleteEvent(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{eventId}/tags/{tagId}")
-    public ResponseEntity<Void> addTagToEvent(@PathVariable Integer eventId, @PathVariable Integer tagId) {
-        eventService.addTagToEvent(eventId, tagId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{eventId}/participate")
-    public ResponseEntity<?> participateEvent(@PathVariable Integer eventId, @RequestHeader HttpHeaders headers) {
-        try {
-            return new ResponseEntity<>(eventService.participateEvent(eventId, headers), HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/{eventId}/tags")
-    public ResponseEntity<Set<TagResponse>> getTagsForEvent(@PathVariable Integer eventId) {
-        Set<TagResponse> tags = eventService.getTagsForEvent(eventId);
-        return ResponseEntity.ok(tags);
     }
 }
