@@ -3,17 +3,12 @@ package crypto_archive.com.api.services;
 import crypto_archive.com.api.mappers.*;
 import crypto_archive.com.api.repositories.*;
 import crypto_archive.com.api.requests.EventRequest;
-import crypto_archive.com.api.requests.ProjectRequest;
 import crypto_archive.com.api.responses.*;
 import crypto_archive.com.api.table_entities.*;
-import crypto_archive.com.api.table_entities.Date;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -100,6 +95,17 @@ public class EventService {
         return SavedEventMapper.INSTANCE.toDto(savedEvent);
     }
 
+    public void unparticipateEvent(Integer eventId, HttpHeaders headers) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
+        User user = userService.getUserFromHeaders(headers)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Set<SavedEvent> savedEvents = savedEventRepository.findByUserAndEvent(user, event).orElseThrow(() -> new ResourceNotFoundException("No Events"));
+        user.getSavedEvents().remove(savedEvents.iterator().next());
+        userRepository.save(user);
+        savedEventRepository.deleteById(savedEvents.iterator().next().getId());
+    }
+
     private Set<EventResponse> getEventsWithSaved(User user, Set<Event> events) {
         Optional<Set<SavedEvent>> savedEventsOpt = savedEventRepository.findByUser(user);
         if(savedEventsOpt.isEmpty()) {
@@ -108,7 +114,12 @@ public class EventService {
 
         Set<SavedEvent> savedEvents = savedEventsOpt.get();
         Set<Integer> savedEventsId = savedEvents.stream()
-                .map(savedEvent -> savedEvent.getEvent().getId())
+                .map(savedEvent -> {
+                    if(savedEvent.getEvent() == null) {
+                        return null;
+                    }
+                    return savedEvent.getEvent().getId();
+                } )
                 .collect(Collectors.toSet());
 
         return events.stream()

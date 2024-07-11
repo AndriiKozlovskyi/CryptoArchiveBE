@@ -44,6 +44,7 @@ public class SavedEventService {
     }
 
     public SavedEventResponse updateSavedEvent(Integer id, SavedEventRequest savedEventRequest) {
+        System.out.println(savedEventRequest);
         SavedEvent _savedEvent = savedEventRepository.findById(id)
                 .map(savedEvent -> {
                     savedEvent.setName(savedEventRequest.getName());

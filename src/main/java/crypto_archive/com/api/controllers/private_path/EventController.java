@@ -51,6 +51,12 @@ public class EventController {
         }
     }
 
+    @PostMapping("/{eventId}/unparticipate")
+    public ResponseEntity<?> unparticipateEvent(@PathVariable Integer eventId, @RequestHeader HttpHeaders headers) {
+        eventService.unparticipateEvent(eventId, headers);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<EventResponse> updateEvent(@PathVariable Integer id, @RequestBody EventRequest eventRequest) {
         try {

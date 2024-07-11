@@ -45,6 +45,8 @@ public class AccountService {
         Account _account = accountRepository.findById(accountId)
                 .map(account -> {
                     account.setName(accountRequest.getName());
+                    account.setIncome(accountRequest.getIncome());
+                    account.setOutcome(accountRequest.getOutcome());
                     return accountRepository.save(account);
                 }).orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + accountId));
 
