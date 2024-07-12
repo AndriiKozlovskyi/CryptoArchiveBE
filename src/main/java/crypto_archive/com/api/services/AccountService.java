@@ -54,6 +54,10 @@ public class AccountService {
     }
 
     public void deleteAccount(Integer id) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + id));
+        SavedEvent savedEvent = account.getSavedEvent();
+        savedEvent.getAccounts().remove(account);
+        savedEventRepository.save(savedEvent);
         accountRepository.deleteById(id);
     }
 }

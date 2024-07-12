@@ -24,6 +24,8 @@ public class EventService {
     private UserRepository userRepository;
     @Autowired
     private TagService tagService;
+    @Autowired
+    SavedEventService savedEventService;
 
     private final String defaultStatus = "todo";
 
@@ -64,7 +66,14 @@ public class EventService {
         return EventMapper.INSTANCE.toDto(_event);
     }
 
-    public void deleteEvent(Integer id) {
+    public void deleteEvent(Integer id, HttpHeaders headers) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+        User user = userService.getUserFromHeaders(headers)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        user.getEvents().remove(event);
+        userRepository.save(user);
         eventRepository.deleteById(id);
     }
 
@@ -101,9 +110,7 @@ public class EventService {
         User user = userService.getUserFromHeaders(headers)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Set<SavedEvent> savedEvents = savedEventRepository.findByUserAndEvent(user, event).orElseThrow(() -> new ResourceNotFoundException("No Events"));
-        user.getSavedEvents().remove(savedEvents.iterator().next());
-        userRepository.save(user);
-        savedEventRepository.deleteById(savedEvents.iterator().next().getId());
+        savedEventService.deleteSavedEvent(savedEvents.iterator().next().getId(), headers);
     }
 
     private Set<EventResponse> getEventsWithSaved(User user, Set<Event> events) {

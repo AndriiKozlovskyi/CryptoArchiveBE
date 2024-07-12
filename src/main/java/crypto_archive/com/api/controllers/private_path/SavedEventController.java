@@ -53,8 +53,8 @@ public class SavedEventController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSavedEvent(@PathVariable Integer id) {
-        savedEventService.deleteSavedEvent(id);
+    public ResponseEntity<Void> deleteSavedEvent(@PathVariable Integer id, @RequestHeader HttpHeaders headers) {
+        savedEventService.deleteSavedEvent(id, headers);
         return ResponseEntity.noContent().build();
     }
 }

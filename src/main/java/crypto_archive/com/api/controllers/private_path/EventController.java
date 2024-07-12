@@ -68,8 +68,8 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable Integer id) {
-        eventService.deleteEvent(id);
+    public ResponseEntity<Void> deleteEvent(@PathVariable Integer id, @RequestHeader HttpHeaders headers) {
+        eventService.deleteEvent(id, headers);
         return ResponseEntity.noContent().build();
     }
 }
