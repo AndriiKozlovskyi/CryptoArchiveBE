@@ -1,16 +1,10 @@
 package crypto_archive.com.api.services;
 
-import crypto_archive.com.api.mappers.DepositMapper;
 import crypto_archive.com.api.mappers.IncomeMapper;
 import crypto_archive.com.api.repositories.AccountRepository;
-import crypto_archive.com.api.repositories.DepositRepository;
 import crypto_archive.com.api.repositories.IncomeRepository;
-import crypto_archive.com.api.repositories.AccountRepository;
-import crypto_archive.com.api.requests.DepositRequest;
 import crypto_archive.com.api.requests.IncomeRequest;
-import crypto_archive.com.api.responses.DepositResponse;
 import crypto_archive.com.api.responses.IncomeResponse;
-import crypto_archive.com.api.table_entities.Deposit;
 import crypto_archive.com.api.table_entities.Income;
 import crypto_archive.com.api.table_entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;

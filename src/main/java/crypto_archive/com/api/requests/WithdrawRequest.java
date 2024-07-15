@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IncomeRequest {
+public class WithdrawRequest {
     private double amount;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime date;

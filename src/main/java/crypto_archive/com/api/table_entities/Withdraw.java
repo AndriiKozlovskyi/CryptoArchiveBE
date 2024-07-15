@@ -13,10 +13,10 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "incomes")
+@Table(name = "withdraws")
 
 //TODO change to withdraw
-public class Income implements TableEntity {
+public class Withdraw implements TableEntity {
     @Id
     @GeneratedValue
     private Integer id;
