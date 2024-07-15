@@ -21,5 +21,4 @@ public class Task implements TableEntity {
     @JoinColumn(name="event_id", nullable=false)
     @EqualsAndHashCode.Exclude
     private Event event;
-
 }

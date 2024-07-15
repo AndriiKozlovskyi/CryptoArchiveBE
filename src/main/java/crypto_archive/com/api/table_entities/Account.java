@@ -6,12 +6,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "accounts")
-public class Account {
+public class Account implements TableEntity {
     @Id
     @GeneratedValue
     private Integer id;
@@ -20,6 +23,10 @@ public class Account {
     @JoinColumn(name="saved_event_id", nullable=false)
     @EqualsAndHashCode.Exclude
     private SavedEvent savedEvent;
-    private double outcome;
-    private double income;
+    @OneToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<Deposit> deposits = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<Income> incomes = new HashSet<>();
 }

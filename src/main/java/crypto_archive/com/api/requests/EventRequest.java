@@ -15,6 +15,7 @@ public class EventRequest {
     private String name;
     private Set<Integer> tagsIds = new HashSet<>();
     private String src;
+    private String link;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime startDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")

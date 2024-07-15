@@ -54,13 +54,13 @@ public class SavedEventService {
     }
 
     public SavedEventResponse updateSavedEvent(Integer id, SavedEventRequest savedEventRequest) {
-        System.out.println(savedEventRequest);
         SavedEvent _savedEvent = savedEventRepository.findById(id)
                 .map(savedEvent -> {
                     savedEvent.setName(savedEventRequest.getName());
                     savedEvent.setStartDate(savedEventRequest.getStartDate());
                     savedEvent.setEndDate(savedEventRequest.getEndDate());
                     savedEvent.setStatus(savedEventRequest.getStatus());
+                    savedEvent.setLink(savedEventRequest.getLink());
                     savedEvent.setOrderNumber(savedEventRequest.getOrderNumber());
                     return savedEventRepository.save(savedEvent);
                 }).orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));

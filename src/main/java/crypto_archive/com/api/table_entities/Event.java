@@ -41,6 +41,7 @@ public class Event implements TableEntity {
     @OneToMany(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private Set<Task> tasks = new HashSet<>();
+    private String link;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime startDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")

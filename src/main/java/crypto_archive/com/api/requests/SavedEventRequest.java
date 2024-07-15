@@ -20,4 +20,5 @@ public class SavedEventRequest {
     private OffsetDateTime startDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime endDate;
+    private String link;
 }

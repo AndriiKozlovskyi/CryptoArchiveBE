@@ -5,7 +5,10 @@ import crypto_archive.com.api.mappers.TaskMapper;
 import crypto_archive.com.api.repositories.AccountRepository;
 import crypto_archive.com.api.repositories.SavedEventRepository;
 import crypto_archive.com.api.requests.AccountRequest;
+import crypto_archive.com.api.requests.DepositRequest;
+import crypto_archive.com.api.requests.IncomeRequest;
 import crypto_archive.com.api.responses.AccountResponse;
+import crypto_archive.com.api.responses.DepositResponse;
 import crypto_archive.com.api.table_entities.Account;
 import crypto_archive.com.api.table_entities.SavedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,10 @@ public class AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private SavedEventRepository savedEventRepository;
+    @Autowired
+    private IncomeService incomeService;
+    @Autowired
+    private DepositService depositService;
 
     public Set<AccountResponse> getAccountsForSavedEvent(Integer savedEventId) {
         SavedEvent savedEvent = savedEventRepository.findById(savedEventId)
@@ -30,12 +37,24 @@ public class AccountService {
         SavedEvent savedEvent = savedEventRepository.findById(savedEventId)
                 .orElseThrow(() -> new ResourceNotFoundException("SavedEvent with id: " + savedEventId + " not found"));
 
-        Account account = AccountMapper.INSTANCE.toEntity(accountRequest);
+        AccountRequest initAccountRequest = new AccountRequest();
+        initAccountRequest.setName(accountRequest.getName());
+
+        Account account = AccountMapper.INSTANCE.toEntity(initAccountRequest);
         account.setSavedEvent(savedEvent);
         Account savedAccount = accountRepository.save(account);
         savedEvent.getAccounts().add(savedAccount);
 
-        accountRepository.save(savedAccount);
+        if(!accountRequest.getDeposits().isEmpty()) {
+            for(DepositRequest depositRequest : accountRequest.getDeposits()) {
+                depositService.createDeposit(account.getId(), depositRequest);
+            }
+        }
+        if(!accountRequest.getIncomes().isEmpty()) {
+            for(IncomeRequest incomeRequest : accountRequest.getIncomes()) {
+                incomeService.createIncome(account.getId(), incomeRequest);
+            }
+        }
         savedEventRepository.save(savedEvent);
 
         return AccountMapper.INSTANCE.toDto(savedAccount);
@@ -45,8 +64,6 @@ public class AccountService {
         Account _account = accountRepository.findById(accountId)
                 .map(account -> {
                     account.setName(accountRequest.getName());
-                    account.setIncome(accountRequest.getIncome());
-                    account.setOutcome(accountRequest.getOutcome());
                     return accountRepository.save(account);
                 }).orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + accountId));
 

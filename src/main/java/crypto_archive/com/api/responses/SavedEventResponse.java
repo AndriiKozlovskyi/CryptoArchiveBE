@@ -20,6 +20,7 @@ public class SavedEventResponse {
     private String status;
     private Set<AccountResponse> accounts = new HashSet<>();
     private int orderNumber;
+    private String link;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime startDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")

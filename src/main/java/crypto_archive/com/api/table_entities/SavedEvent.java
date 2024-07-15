@@ -38,5 +38,6 @@ public class SavedEvent implements TableEntity {
     @EqualsAndHashCode.Exclude
     private Set<Account> accounts = new HashSet<>();
     private String status;
+    private String link;
     private int orderNumber;
 }

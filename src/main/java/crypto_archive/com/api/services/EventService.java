@@ -60,6 +60,7 @@ public class EventService {
                 event.setSrc(eventRequest.getSrc());
                 event.setStartDate(eventRequest.getStartDate());
                 event.setEndDate(eventRequest.getEndDate());
+                event.setLink(eventRequest.getLink());
                 event.setTags(tagService.getTagsByIds(eventRequest.getTagsIds()));
                 return eventRepository.save(event);
             }).orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + id));
@@ -88,6 +89,7 @@ public class EventService {
         savedEvent.setName(event.getName());
         savedEvent.setStartDate(event.getStartDate());
         savedEvent.setEndDate(event.getEndDate());
+        savedEvent.setLink(event.getLink());
         savedEvent.setUser(user);
         savedEvent.setEvent(event);
         savedEvent.setStatus(defaultStatus);

@@ -23,6 +23,7 @@ public class EventResponse {
     private String src;
     private Set<TaskResponse> tasks;
     private boolean saved;
+    private String link;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime startDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
