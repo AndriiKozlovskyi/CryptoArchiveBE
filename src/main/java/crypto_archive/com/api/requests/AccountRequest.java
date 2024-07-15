@@ -1,5 +1,6 @@
 package crypto_archive.com.api.requests;
 
+import crypto_archive.com.api.responses.RewardResponse;
 import crypto_archive.com.api.table_entities.Deposit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,6 @@ import java.util.Set;
 public class AccountRequest {
     private String name;
     private Set<DepositRequest> deposits = new HashSet<>();
-    private Set<IncomeRequest> incomes = new HashSet<>();
-
+    private Set<WithdrawRequest> withdraws = new HashSet<>();
+    private Set<RewardRequest> rewards = new HashSet<>();
 }

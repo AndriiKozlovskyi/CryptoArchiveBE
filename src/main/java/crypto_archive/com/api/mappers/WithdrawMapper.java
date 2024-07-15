@@ -6,8 +6,7 @@ import crypto_archive.com.api.table_entities.Withdraw;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = { ModelMapper.class, TaskMapper.class })
-
-public interface IncomeMapper extends BaseDtoMapper<Withdraw, WithdrawRequest, WithdrawResponse> {
-    IncomeMapper INSTANCE = Mappers.getMapper(IncomeMapper.class);
+@Mapper(uses = { ModelMapper.class, AccountMapper.class })
+public interface WithdrawMapper extends BaseDtoMapper<Withdraw, WithdrawRequest, WithdrawResponse> {
+    WithdrawMapper INSTANCE = Mappers.getMapper(WithdrawMapper.class);
 }

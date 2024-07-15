@@ -14,6 +14,6 @@ public class AccountResponse {
     private Integer id;
     private String name;
     private Set<DepositResponse> deposits = new HashSet<>();
-    private Set<IncomeResponse> incomes = new HashSet<>();
-
+    private Set<WithdrawResponse> withdraws = new HashSet<>();
+    private Set<RewardResponse> rewards = new HashSet<>();
 }

@@ -28,5 +28,8 @@ public class Account implements TableEntity {
     private Set<Deposit> deposits = new HashSet<>();
     @OneToMany(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
-    private Set<Income> incomes = new HashSet<>();
+    private Set<Withdraw> withdraws = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<Reward> rewards = new HashSet<>();
 }

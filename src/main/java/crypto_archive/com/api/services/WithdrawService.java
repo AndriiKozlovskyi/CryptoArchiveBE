@@ -1,11 +1,11 @@
 package crypto_archive.com.api.services;
 
-import crypto_archive.com.api.mappers.IncomeMapper;
+import crypto_archive.com.api.mappers.WithdrawMapper;
 import crypto_archive.com.api.repositories.AccountRepository;
-import crypto_archive.com.api.repositories.IncomeRepository;
-import crypto_archive.com.api.requests.IncomeRequest;
-import crypto_archive.com.api.responses.IncomeResponse;
-import crypto_archive.com.api.table_entities.Income;
+import crypto_archive.com.api.repositories.WithdrawRepository;
+import crypto_archive.com.api.requests.WithdrawRequest;
+import crypto_archive.com.api.responses.WithdrawResponse;
+import crypto_archive.com.api.table_entities.Withdraw;
 import crypto_archive.com.api.table_entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,50 +13,51 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 
 @Service
-public class IncomeService {
+public class WithdrawService {
     @Autowired
-    private IncomeRepository incomeRepository;
+    private WithdrawRepository withdrawRepository;
     @Autowired
     private AccountRepository accountRepository;
 
-    public Set<IncomeResponse> getIncomesForAccount(Integer accountId) {
+    public Set<WithdrawResponse> getWithdrawsForAccount(Integer accountId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new ResourceNotFoundException("Account with id: " + accountId + " not found"));
 
-        return IncomeMapper.INSTANCE.toDtos(account.getIncomes());
+        return WithdrawMapper.INSTANCE.toDtos(account.getWithdraws());
     }
 
-    public IncomeResponse createIncome(Integer accountId, IncomeRequest incomeRequest) {
+    public WithdrawResponse createWithdraw(Integer accountId, WithdrawRequest withdrawRequest) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new ResourceNotFoundException("Account with id: " + accountId + " not found"));
 
-        Income income = IncomeMapper.INSTANCE.toEntity(incomeRequest);
-        income.setAccount(account);
-        Income savedIncome = incomeRepository.save(income);
-        account.getIncomes().add(savedIncome);
+        Withdraw withdraw = WithdrawMapper.INSTANCE.toEntity(withdrawRequest);
+        withdraw.setAccount(account);
+        Withdraw savedWithdraw = withdrawRepository.save(withdraw);
+        account.getWithdraws().add(savedWithdraw);
 
-        incomeRepository.save(savedIncome);
+        withdrawRepository.save(savedWithdraw);
         accountRepository.save(account);
 
-        return IncomeMapper.INSTANCE.toDto(savedIncome);
+        return WithdrawMapper.INSTANCE.toDto(savedWithdraw);
     }
 
-    public IncomeResponse updateIncome(Integer incomeId, IncomeRequest incomeRequest) {
-        Income _income = incomeRepository.findById(incomeId)
-                .map(income -> {
-                    income.setAmount(incomeRequest.getAmount());
-                    income.setDate(incomeRequest.getDate());
-                    return incomeRepository.save(income);
-                }).orElseThrow(() -> new ResourceNotFoundException("Income not found with id " + incomeId));
+    public WithdrawResponse updateWithdraw(Integer withdrawId, WithdrawRequest withdrawRequest) {
+        Withdraw _withdraw = withdrawRepository.findById(withdrawId)
+                .map(withdraw -> {
+                    withdraw.setAmount(withdrawRequest.getAmount());
+                    withdraw.setDate(withdrawRequest.getDate());
+                    return withdrawRepository.save(withdraw);
+                }).orElseThrow(() -> new ResourceNotFoundException("Withdraw not found with id " + withdrawId));
 
-        return IncomeMapper.INSTANCE.toDto(_income);
+        return WithdrawMapper.INSTANCE.toDto(_withdraw);
     }
 
-    public void deleteIncome(Integer id) {
-        Income income = incomeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Income not found with id " + id));
-        Account account = income.getAccount();
-        account.getIncomes().remove(income);
+    public void deleteWithdraw(Integer id) {
+        Withdraw withdraw = withdrawRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Withdraw not found with id " + id));
+        Account account = withdraw.getAccount();
+        account.getWithdraws().remove(withdraw);
         accountRepository.save(account);
-        incomeRepository.deleteById(id);
-    }}
+        withdrawRepository.deleteById(id);
+    }
+}

@@ -14,8 +14,6 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "withdraws")
-
-//TODO change to withdraw
 public class Withdraw implements TableEntity {
     @Id
     @GeneratedValue

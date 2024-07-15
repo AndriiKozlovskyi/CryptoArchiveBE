@@ -19,6 +19,7 @@ public class Reward implements TableEntity {
     @GeneratedValue
     private Integer id;
     private double amount;
+    private String token;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="account_id")
     @EqualsAndHashCode.Exclude

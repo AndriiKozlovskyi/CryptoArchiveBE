@@ -1,14 +1,13 @@
 package crypto_archive.com.api.services;
 
 import crypto_archive.com.api.mappers.AccountMapper;
-import crypto_archive.com.api.mappers.TaskMapper;
 import crypto_archive.com.api.repositories.AccountRepository;
 import crypto_archive.com.api.repositories.SavedEventRepository;
 import crypto_archive.com.api.requests.AccountRequest;
 import crypto_archive.com.api.requests.DepositRequest;
-import crypto_archive.com.api.requests.IncomeRequest;
+import crypto_archive.com.api.requests.RewardRequest;
+import crypto_archive.com.api.requests.WithdrawRequest;
 import crypto_archive.com.api.responses.AccountResponse;
-import crypto_archive.com.api.responses.DepositResponse;
 import crypto_archive.com.api.table_entities.Account;
 import crypto_archive.com.api.table_entities.SavedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,11 @@ public class AccountService {
     @Autowired
     private SavedEventRepository savedEventRepository;
     @Autowired
-    private IncomeService incomeService;
+    private WithdrawService withdrawService;
     @Autowired
     private DepositService depositService;
+    @Autowired
+    private RewardService rewardService;
 
     public Set<AccountResponse> getAccountsForSavedEvent(Integer savedEventId) {
         SavedEvent savedEvent = savedEventRepository.findById(savedEventId)
@@ -50,9 +51,14 @@ public class AccountService {
                 depositService.createDeposit(account.getId(), depositRequest);
             }
         }
-        if(!accountRequest.getIncomes().isEmpty()) {
-            for(IncomeRequest incomeRequest : accountRequest.getIncomes()) {
-                incomeService.createIncome(account.getId(), incomeRequest);
+        if(!accountRequest.getWithdraws().isEmpty()) {
+            for(WithdrawRequest withdrawRequest : accountRequest.getWithdraws()) {
+                withdrawService.createWithdraw(account.getId(), withdrawRequest);
+            }
+        }
+        if(!accountRequest.getRewards().isEmpty()) {
+            for(RewardRequest rewardRequest : accountRequest.getRewards()) {
+                rewardService.createReward(account.getId(), rewardRequest);
             }
         }
         savedEventRepository.save(savedEvent);

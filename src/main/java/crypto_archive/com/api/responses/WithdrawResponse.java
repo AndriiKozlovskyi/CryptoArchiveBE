@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IncomeResponse {
+public class WithdrawResponse {
     private Integer id;
     private double amount;
     private Integer account;
