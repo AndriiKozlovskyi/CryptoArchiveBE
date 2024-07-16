@@ -34,6 +34,7 @@ public class SavedEvent implements TableEntity {
     @JoinColumn(name="event_id")
     @EqualsAndHashCode.Exclude
     private Event event;
+    private String rewardType;
     @OneToMany(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private Set<Account> accounts = new HashSet<>();

@@ -16,6 +16,7 @@ public class SavedEventRequest {
     private String name;
     private String status;
     private int orderNumber;
+    private String rewardType;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     private OffsetDateTime startDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")

@@ -12,7 +12,6 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class RewardResponse {
     private Integer id;
-    private String token;
     private double amount;
     private Integer account;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")

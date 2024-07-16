@@ -60,6 +60,7 @@ public class SavedEventService {
                     savedEvent.setStartDate(savedEventRequest.getStartDate());
                     savedEvent.setEndDate(savedEventRequest.getEndDate());
                     savedEvent.setStatus(savedEventRequest.getStatus());
+                    savedEvent.setRewardType(savedEventRequest.getRewardType());
                     savedEvent.setLink(savedEventRequest.getLink());
                     savedEvent.setOrderNumber(savedEventRequest.getOrderNumber());
                     return savedEventRepository.save(savedEvent);
