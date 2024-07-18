@@ -21,7 +21,6 @@ public class EventResponse {
     private Set<TagResponse> tags = new HashSet<>();
     private Set<UserResponse> participants = new HashSet<>();
     private String src;
-    private Set<TaskResponse> tasks;
     private boolean saved;
     private String link;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")

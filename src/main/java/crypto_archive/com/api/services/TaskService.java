@@ -1,11 +1,13 @@
 package crypto_archive.com.api.services;
 
 import crypto_archive.com.api.mappers.TaskMapper;
-import crypto_archive.com.api.repositories.EventRepository;
+import crypto_archive.com.api.repositories.AccountRepository;
+import crypto_archive.com.api.repositories.SavedEventRepository;
 import crypto_archive.com.api.repositories.TaskRepository;
 import crypto_archive.com.api.requests.TaskRequest;
 import crypto_archive.com.api.responses.TaskResponse;
-import crypto_archive.com.api.table_entities.Event;
+import crypto_archive.com.api.table_entities.Account;
+import crypto_archive.com.api.table_entities.SavedEvent;
 import crypto_archive.com.api.table_entities.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,26 +19,39 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
-    private EventRepository eventRepository;
+    private SavedEventRepository savedEventRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
-    public Set<TaskResponse> getTasksForEvent(Integer eventId) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResourceNotFoundException("Event with id: " + eventId + " not found"));
+    public Set<TaskResponse> getTasksForSavedEvent(Integer savedEventId) {
+        SavedEvent savedEvent = savedEventRepository.findById(savedEventId)
+                .orElseThrow(() -> new ResourceNotFoundException("SavedEvent with id: " + savedEventId + " not found"));
 
-        return TaskMapper.INSTANCE.toDtos(event.getTasks());
+        return TaskMapper.INSTANCE.toDtos(savedEvent.getTasks());
     }
 
-    public TaskResponse createTask(Integer eventId, TaskRequest taskRequest) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResourceNotFoundException("Event with id: " + eventId + " not found"));
+    public TaskResponse createTask(Integer savedEventId, TaskRequest taskRequest) {
+        SavedEvent savedEvent = savedEventRepository.findById(savedEventId)
+                .orElseThrow(() -> new ResourceNotFoundException("SavedEvent with id: " + savedEventId + " not found"));
 
         Task task = TaskMapper.INSTANCE.toEntity(taskRequest);
-        task.setEvent(event);
+        task.setSavedEvent(savedEvent);
         Task savedTask = taskRepository.save(task);
-        event.getTasks().add(savedTask);
+        savedEvent.getTasks().add(savedTask);
 
-        taskRepository.save(savedTask);
-        eventRepository.save(event);
+        Set<Account> accounts = savedEvent.getAccounts();
+
+        for (Account account : accounts) {
+            Task task1 = new Task();
+            task1.setHeader(savedTask.getHeader());
+            task1.setAccount(account);
+            task1.setSavedEvent(savedEvent);
+            Task savedTask1 = taskRepository.save(task1);
+            account.getTasks().add(savedTask1);
+            accountRepository.save(account);
+        }
+
+        savedEventRepository.save(savedEvent);
 
         return TaskMapper.INSTANCE.toDto(savedTask);
     }
@@ -46,6 +61,7 @@ public class TaskService {
                 .map(task -> {
                     task.setHeader(taskRequest.getHeader());
                     task.setDescription(taskRequest.getDescription());
+                    task.setCompleted(taskRequest.isCompleted());
                     return taskRepository.save(task);
                 }).orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + taskId));
 

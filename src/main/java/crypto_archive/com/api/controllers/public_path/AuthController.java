@@ -5,6 +5,7 @@ import crypto_archive.com.api.requests.RegisterRequest;
 import crypto_archive.com.api.responses.AuthResponse;
 import crypto_archive.com.api.services.AuthService;
 import crypto_archive.com.api.services.JwtService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +40,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        return ResponseEntity.ok(service.authenticate(request));
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+        try {
+            return ResponseEntity.ok(service.authenticate(request));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/isTokenExpired")

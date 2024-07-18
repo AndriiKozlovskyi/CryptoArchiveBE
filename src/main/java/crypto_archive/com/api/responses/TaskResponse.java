@@ -11,4 +11,6 @@ public class TaskResponse {
     private Integer id;
     private String header;
     private String description;
+    private Integer savedEvent;
+    private boolean completed;
 }

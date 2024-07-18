@@ -16,4 +16,5 @@ public class AccountResponse {
     private Set<DepositResponse> deposits = new HashSet<>();
     private Set<WithdrawResponse> withdraws = new HashSet<>();
     private Set<RewardResponse> rewards = new HashSet<>();
+    private Set<TaskResponse> tasks = new HashSet<>();
 }

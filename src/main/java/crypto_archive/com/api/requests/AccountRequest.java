@@ -1,6 +1,7 @@
 package crypto_archive.com.api.requests;
 
 import crypto_archive.com.api.responses.RewardResponse;
+import crypto_archive.com.api.responses.TaskResponse;
 import crypto_archive.com.api.table_entities.Deposit;
 import lombok.AllArgsConstructor;
 import lombok.Data;

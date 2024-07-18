@@ -18,9 +18,9 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<Set<TaskResponse>> getAllTasksForEvent(@RequestParam Integer eventId) {
+    public ResponseEntity<Set<TaskResponse>> getAllTasksForSavedEvent(@RequestParam Integer savedEventId) {
         try {
-            Set<TaskResponse> tasks = taskService.getTasksForEvent(eventId);
+            Set<TaskResponse> tasks = taskService.getTasksForSavedEvent(savedEventId);
             return ResponseEntity.ok(tasks);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -28,9 +28,9 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskResponse> createTask(@RequestParam Integer eventId, @RequestBody TaskRequest taskRequest) {
+    public ResponseEntity<TaskResponse> createTask(@RequestParam Integer savedEventId, @RequestBody TaskRequest taskRequest) {
         try {
-            TaskResponse task = taskService.createTask(eventId, taskRequest);
+            TaskResponse task = taskService.createTask(savedEventId, taskRequest);
             return ResponseEntity.ok(task);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();

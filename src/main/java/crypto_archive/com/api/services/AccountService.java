@@ -10,6 +10,7 @@ import crypto_archive.com.api.requests.WithdrawRequest;
 import crypto_archive.com.api.responses.AccountResponse;
 import crypto_archive.com.api.table_entities.Account;
 import crypto_archive.com.api.table_entities.SavedEvent;
+import crypto_archive.com.api.table_entities.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Set;
@@ -46,6 +47,10 @@ public class AccountService {
         Account savedAccount = accountRepository.save(account);
         savedEvent.getAccounts().add(savedAccount);
 
+        for(Task task : savedEvent.getTasks()) {
+            account.getTasks().add(task);
+        }
+
         if(!accountRequest.getDeposits().isEmpty()) {
             for(DepositRequest depositRequest : accountRequest.getDeposits()) {
                 depositService.createDeposit(account.getId(), depositRequest);
@@ -62,7 +67,7 @@ public class AccountService {
             }
         }
         savedEventRepository.save(savedEvent);
-
+        accountRepository.save(account);
         return AccountMapper.INSTANCE.toDto(savedAccount);
     }
 

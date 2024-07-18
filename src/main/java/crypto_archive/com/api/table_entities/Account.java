@@ -32,4 +32,7 @@ public class Account implements TableEntity {
     @OneToMany(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private Set<Reward> rewards = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<Task> tasks = new HashSet<>();
 }

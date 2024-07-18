@@ -38,6 +38,9 @@ public class SavedEvent implements TableEntity {
     @OneToMany(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private Set<Account> accounts = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<Task> tasks = new HashSet<>();
     private String status;
     private String link;
     private int orderNumber;
