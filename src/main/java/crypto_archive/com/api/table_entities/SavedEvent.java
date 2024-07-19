@@ -35,10 +35,10 @@ public class SavedEvent implements TableEntity {
     @EqualsAndHashCode.Exclude
     private Event event;
     private String rewardType;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @EqualsAndHashCode.Exclude
     private Set<Account> accounts = new HashSet<>();
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @EqualsAndHashCode.Exclude
     private Set<Task> tasks = new HashSet<>();
     private String status;

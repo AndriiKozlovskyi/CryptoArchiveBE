@@ -7,6 +7,7 @@ import crypto_archive.com.api.repositories.TaskRepository;
 import crypto_archive.com.api.requests.TaskRequest;
 import crypto_archive.com.api.responses.TaskResponse;
 import crypto_archive.com.api.table_entities.Account;
+import crypto_archive.com.api.table_entities.Event;
 import crypto_archive.com.api.table_entities.SavedEvent;
 import crypto_archive.com.api.table_entities.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,14 @@ public class TaskService {
     }
 
     public void deleteTask(Integer id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
+
+        Account account = task.getAccount();
+        account.getTasks().remove(task);
+
+        accountRepository.save(account);
         taskRepository.deleteById(id);
+
     }
 }

@@ -23,16 +23,16 @@ public class Account implements TableEntity {
     @JoinColumn(name="saved_event_id", nullable=false)
     @EqualsAndHashCode.Exclude
     private SavedEvent savedEvent;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @EqualsAndHashCode.Exclude
     private Set<Deposit> deposits = new HashSet<>();
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @EqualsAndHashCode.Exclude
     private Set<Withdraw> withdraws = new HashSet<>();
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @EqualsAndHashCode.Exclude
     private Set<Reward> rewards = new HashSet<>();
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @EqualsAndHashCode.Exclude
     private Set<Task> tasks = new HashSet<>();
 }
