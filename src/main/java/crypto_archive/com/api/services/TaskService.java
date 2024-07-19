@@ -73,10 +73,15 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
 
-        Account account = task.getAccount();
-        account.getTasks().remove(task);
+        SavedEvent savedEvent = task.getSavedEvent();
+        savedEvent.getTasks().remove(task);
 
-        accountRepository.save(account);
+        if(task.getAccount() != null) {
+            Account account = task.getAccount();
+            account.getTasks().remove(task);
+            accountRepository.save(account);
+        }
+        savedEventRepository.save(savedEvent);
         taskRepository.deleteById(id);
 
     }
